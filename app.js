@@ -11,7 +11,21 @@ const DEFAULT_THRESHOLD = parseInt(process.env.DEFAULT_THRESHOLD || "10");
 const products = new Map([
   ["prod-001", { id: "prod-001", name: "Laptop Pro 15",       stock: 3,  threshold: 5  }],
   ["prod-002", { id: "prod-002", name: "Mechanical Keyboard", stock: 12, threshold: 10 }],
-  ["prod-003"
+  ["prod-003", { id: "prod-003", name: "USB-C Hub",           stock: 0,  threshold: 5  }],
+  ["prod-004", { id: "prod-004", name: "Monitor 27 pouces",   stock: 8,  threshold: 10 }],
+]);
+
+const alerts = new Map();
+
+function genId() { return crypto.randomBytes(4).toString("hex"); }
+
+function checkAndAlert(product) {
+  if (product.stock < product.threshold) {
+    const id = genId();
+    const alert = {
+      id,
+      productId: product.id,
+      productName: product.name,
       currentStock: product.stock,
       threshold: product.threshold,
       severity: product.stock === 0 ? "critical" : "warning",
